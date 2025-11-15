@@ -9,25 +9,50 @@
   "options": {
     "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": false
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
-    "date": {
-      "type": "datetime"
-    },
-    "total": {
-      "type": "integer"
+    "invoice_number": {
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "customer_name": {
       "type": "string"
+    },
+    "customer_email": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "customer_phone": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "date": {
+      "type": "datetime"
     },
     "products": {
       "type": "component",
       "component": "shared.sale-item",
       "repeatable": true
+    },
+    "subtotal": {
+      "type": "decimal"
+    },
+    "tax_amount": {
+      "type": "decimal"
+    },
+    "discount_amount": {
+      "type": "decimal",
+      "min": 0,
+      "max": 100
+    },
+    "total": {
+      "type": "integer"
+    },
+    "notes": {
+      "type": "text"
     }
   }
 }
