@@ -6,8 +6,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 exports.default = ({ env }) => {
-    // Choose database client; default to 'postgres' for your setup
-    const client = env('DATABASE_CLIENT', 'postgres');
+    const isTest = env('NODE_ENV') === 'test';
+    // Choose database client; force sqlite for tests to avoid external DB dependency
+    const rawClient = String(env('DATABASE_CLIENT', 'postgres'));
+    const client = isTest || !['mysql', 'postgres', 'sqlite'].includes(rawClient)
+        ? 'sqlite'
+        : rawClient;
     // Detect if a full connection string is provided (e.g., for production PaaS)
     const hasUrl = !!env('DATABASE_URL');
     // Shared SSL resolver: boolean false for local; object when enabled
@@ -64,7 +68,8 @@ exports.default = ({ env }) => {
         },
         sqlite: {
             connection: {
-                filename: path_1.default.join(__dirname, '..', '..', env('DATABASE_FILENAME', '.tmp/data.db')),
+                // If DATABASE_FILENAME is empty, fall back to the defaults
+                filename: path_1.default.join(__dirname, '..', '..', env('DATABASE_FILENAME') || (isTest ? '.tmp/test.db' : '.tmp/data.db')),
             },
             useNullAsDefault: true,
             acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),

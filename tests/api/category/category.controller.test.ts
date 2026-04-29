@@ -1,7 +1,5 @@
 //// backend/test/api/sale/category.controller.test.ts
 
-//// backend/test/api/sale/category.controller.test.ts
-
 import { jest } from '@jest/globals';
 import { createMockCtx, createMockStrapi } from '../../helpers/mock-strapi';
 
